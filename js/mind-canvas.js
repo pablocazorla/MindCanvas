@@ -17,22 +17,29 @@ if(!window.log){
 	mc.prototype = {
 		canvas : null,
 		c : null,
-		map : [],
+		centerX :0,
+		centerY :0,
+		map : {
+			nodes :[]
+		},
 		length : 0,
+		nodeSelected : null,
 		
 		
 		init : function(id){
 			this.canvas = document.getElementById(id);
 			this.c = this.canvas.getContext('2d');
+			this.centerX = this.canvas.width/2;
+			this.centerY = this.canvas.height/2;
 			
-			this.createNode().render();
+			this.createNode().createNode({x:500,y:400}).render();
 			
 			return this;
 		},
 		createNode : function(custom){
 			var newNode = {
-				x : 400,
-				y : 300,
+				x : this.centerX,
+				y : this.centerY,
 				w : 160,
 				h : 50,
 				borderRadius : 10,
@@ -43,25 +50,23 @@ if(!window.log){
 				text : 'Node'
 			}
 			newNode = this.utils.extend(newNode,custom);
-			this.map.push(newNode);
+			this.map.nodes.push(newNode);
 			this.length++;
 			return this;
 		},
 		render : function(){
 			for(var i = 0;i < this.length;i++){
-				var node = this.map[i];
+				var node = this.map.nodes[i];
 				
 				this.c.fillStyle = node.style.fillStyle;
-				this.c.strokeStyle = node.style.strokeStyle;
-				
-				this.c.translate(node.x,node.y);
+				this.c.strokeStyle = node.style.strokeStyle;		
 				
 				this.c.beginPath();
-				this.c.moveTo(-0.5*node.w,-0.5*node.h);
-				this.c.lineTo(0.5*node.w,-0.5*node.h);
-				this.c.lineTo(0.5*node.w,0.5*node.h);
-				this.c.lineTo(-0.5*node.w,0.5*node.h);
-				this.c.lineTo(-0.5*node.w,-0.5*node.h);
+				this.c.moveTo(node.x-0.5*node.w,node.y-0.5*node.h);
+				this.c.lineTo(node.x+0.5*node.w,node.y-0.5*node.h);
+				this.c.lineTo(node.x+0.5*node.w,node.y+0.5*node.h);
+				this.c.lineTo(node.x-0.5*node.w,node.y+0.5*node.h);
+				this.c.lineTo(node.x-0.5*node.w,node.y-0.5*node.h);
 				this.c.fill();
 				this.c.stroke();
 				
@@ -69,6 +74,70 @@ if(!window.log){
 			}
 			return this;
 		},
+		
+		//Events
+		
+		onHit : function(element,callback){
+			
+			/*
+			if(mouseX > xmin && mouseX < xmax && mouseY > ymin && mouseY < ymax){
+				return true;
+			}else{
+				return false;
+			};
+			*/
+	},
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		utils : {
@@ -82,6 +151,27 @@ if(!window.log){
 					};
 				};
 				return destination;
+			},
+			mouse : function(event){
+				
+				var xScroll = 0, yScroll = 0;
+				//Get Scroll
+			    if( typeof( window.pageYOffset ) == 'number' ) {
+			        //Netscape compliant
+			        yScrollScroll = window.pageYOffset;
+			        x = window.pageXOffset;
+			    } else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
+			        //DOM compliant
+			        yScroll = document.body.scrollTop;
+			        xScroll = document.body.scrollLeft;
+			    } else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
+			        //IE6 standards compliant mode
+			        yScroll = document.documentElement.scrollTop;
+			        xScroll = document.documentElement.scrollLeft;
+			    }
+			    
+			    this.x = event.clientX-canvas.offsetLeft + xScroll;
+				this.y = event.clientY-canvas.offsetTop + yScroll;
 			}
 		}
 	};
